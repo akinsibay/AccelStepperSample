@@ -61,6 +61,7 @@
             this.ExtraStepAnaTxt.Name = "ExtraStepAnaTxt";
             this.ExtraStepAnaTxt.Size = new System.Drawing.Size(81, 23);
             this.ExtraStepAnaTxt.TabIndex = 12;
+            this.ExtraStepAnaTxt.TextChanged += new System.EventHandler(this.ExtraStepAnaTxt_TextChanged);
             // 
             // label2
             // 
@@ -89,6 +90,7 @@
             this.HizTxt.Name = "HizTxt";
             this.HizTxt.Size = new System.Drawing.Size(81, 23);
             this.HizTxt.TabIndex = 9;
+            this.HizTxt.TextChanged += new System.EventHandler(this.HizTxt_TextChanged);
             // 
             // HizlanBtn
             // 
@@ -106,7 +108,7 @@
             // 
             this.StepLbl.AutoSize = true;
             this.StepLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.StepLbl.Location = new System.Drawing.Point(153, 5);
+            this.StepLbl.Location = new System.Drawing.Point(235, 5);
             this.StepLbl.Name = "StepLbl";
             this.StepLbl.Size = new System.Drawing.Size(20, 24);
             this.StepLbl.TabIndex = 5;
@@ -127,7 +129,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label4.Location = new System.Drawing.Point(76, 5);
+            this.label4.Location = new System.Drawing.Point(152, 5);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(58, 24);
             this.label4.TabIndex = 6;
@@ -191,6 +193,7 @@
             this.ExtraStepIlaveTxt.Name = "ExtraStepIlaveTxt";
             this.ExtraStepIlaveTxt.Size = new System.Drawing.Size(81, 23);
             this.ExtraStepIlaveTxt.TabIndex = 12;
+            this.ExtraStepIlaveTxt.TextChanged += new System.EventHandler(this.ExtraStepIlaveTxt_TextChanged);
             // 
             // ExtraStepIlaveLbl
             // 
