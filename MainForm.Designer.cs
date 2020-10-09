@@ -35,8 +35,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.HizTxt = new System.Windows.Forms.TextBox();
             this.HizlanBtn = new System.Windows.Forms.Button();
-            this.StepLbl = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.PositionBtn = new System.Windows.Forms.Button();
+            this.RunningBtn = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ProgramBtn = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.IlaveAdetLbl = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.DurdurBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -44,12 +50,11 @@
             this.IlaveCheckBox = new System.Windows.Forms.CheckBox();
             this.ExtraStepIlaveTxt = new System.Windows.Forms.TextBox();
             this.ExtraStepIlaveLbl = new System.Windows.Forms.Label();
-            this.timer = new System.Windows.Forms.Timer(this.components);
             this.TersYonCheck = new System.Windows.Forms.CheckBox();
             this.baglanBtn = new System.Windows.Forms.Button();
             this.baglantiKesBtn = new System.Windows.Forms.Button();
             this.baglantiStatus = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
+            this.PortComboBox = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -58,6 +63,7 @@
             // arduino
             // 
             this.arduino.PortName = "COM3";
+            this.arduino.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.arduino_DataReceived);
             // 
             // ExtraStepAnaTxt
             // 
@@ -109,32 +115,104 @@
             this.HizlanBtn.UseVisualStyleBackColor = false;
             this.HizlanBtn.Click += new System.EventHandler(this.HizlanBtn_Click);
             // 
-            // StepLbl
-            // 
-            this.StepLbl.AutoSize = true;
-            this.StepLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.StepLbl.Location = new System.Drawing.Point(240, 5);
-            this.StepLbl.Name = "StepLbl";
-            this.StepLbl.Size = new System.Drawing.Size(20, 24);
-            this.StepLbl.TabIndex = 5;
-            this.StepLbl.Text = "0";
-            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.panel1.Controls.Add(this.PositionBtn);
+            this.panel1.Controls.Add(this.RunningBtn);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.ProgramBtn);
+            this.panel1.Controls.Add(this.label8);
+            this.panel1.Controls.Add(this.IlaveAdetLbl);
+            this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.StepLbl);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 279);
+            this.panel1.Location = new System.Drawing.Point(0, 268);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(464, 38);
+            this.panel1.Size = new System.Drawing.Size(464, 98);
             this.panel1.TabIndex = 13;
+            // 
+            // PositionBtn
+            // 
+            this.PositionBtn.BackColor = System.Drawing.Color.Khaki;
+            this.PositionBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PositionBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.PositionBtn.Location = new System.Drawing.Point(162, 5);
+            this.PositionBtn.Name = "PositionBtn";
+            this.PositionBtn.Size = new System.Drawing.Size(94, 26);
+            this.PositionBtn.TabIndex = 31;
+            this.PositionBtn.Text = "0";
+            this.PositionBtn.UseVisualStyleBackColor = false;
+            // 
+            // RunningBtn
+            // 
+            this.RunningBtn.BackColor = System.Drawing.Color.DarkGray;
+            this.RunningBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.RunningBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.RunningBtn.Location = new System.Drawing.Point(162, 34);
+            this.RunningBtn.Name = "RunningBtn";
+            this.RunningBtn.Size = new System.Drawing.Size(94, 26);
+            this.RunningBtn.TabIndex = 30;
+            this.RunningBtn.Text = "DURUYOR";
+            this.RunningBtn.UseVisualStyleBackColor = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label3.Location = new System.Drawing.Point(3, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(97, 24);
+            this.label3.TabIndex = 29;
+            this.label3.Text = "Program : ";
+            // 
+            // ProgramBtn
+            // 
+            this.ProgramBtn.BackColor = System.Drawing.Color.DarkGray;
+            this.ProgramBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ProgramBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.ProgramBtn.Location = new System.Drawing.Point(162, 63);
+            this.ProgramBtn.Name = "ProgramBtn";
+            this.ProgramBtn.Size = new System.Drawing.Size(94, 26);
+            this.ProgramBtn.TabIndex = 23;
+            this.ProgramBtn.Text = "YOK";
+            this.ProgramBtn.UseVisualStyleBackColor = false;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label8.Location = new System.Drawing.Point(300, 65);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(107, 24);
+            this.label8.TabIndex = 27;
+            this.label8.Text = "İlave Adet : ";
+            // 
+            // IlaveAdetLbl
+            // 
+            this.IlaveAdetLbl.AutoSize = true;
+            this.IlaveAdetLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.IlaveAdetLbl.Location = new System.Drawing.Point(423, 65);
+            this.IlaveAdetLbl.Name = "IlaveAdetLbl";
+            this.IlaveAdetLbl.Size = new System.Drawing.Size(20, 24);
+            this.IlaveAdetLbl.TabIndex = 25;
+            this.IlaveAdetLbl.Text = "0";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label7.Location = new System.Drawing.Point(3, 34);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(97, 24);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "Running : ";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label4.Location = new System.Drawing.Point(63, 5);
+            this.label4.Location = new System.Drawing.Point(3, 5);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(153, 24);
             this.label4.TabIndex = 6;
@@ -210,12 +288,6 @@
             this.ExtraStepIlaveLbl.TabIndex = 11;
             this.ExtraStepIlaveLbl.Text = "Ekstra Step : ";
             // 
-            // timer
-            // 
-            this.timer.Enabled = true;
-            this.timer.Interval = 1000;
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
-            // 
             // TersYonCheck
             // 
             this.TersYonCheck.AutoSize = true;
@@ -251,6 +323,7 @@
             // 
             // baglantiStatus
             // 
+            this.baglantiStatus.BackColor = System.Drawing.Color.Red;
             this.baglantiStatus.Dock = System.Windows.Forms.DockStyle.Top;
             this.baglantiStatus.FlatAppearance.BorderSize = 0;
             this.baglantiStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -260,24 +333,27 @@
             this.baglantiStatus.Name = "baglantiStatus";
             this.baglantiStatus.Size = new System.Drawing.Size(464, 24);
             this.baglantiStatus.TabIndex = 20;
-            this.baglantiStatus.Text = "BAĞLANDI";
-            this.baglantiStatus.UseVisualStyleBackColor = true;
+            this.baglantiStatus.Text = "BAĞLANTI KESİLDİ";
+            this.baglantiStatus.UseVisualStyleBackColor = false;
             // 
-            // label3
+            // PortComboBox
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(304, 39);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "label3";
+            this.PortComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.PortComboBox.FormattingEnabled = true;
+            this.PortComboBox.Location = new System.Drawing.Point(244, 39);
+            this.PortComboBox.Name = "PortComboBox";
+            this.PortComboBox.Size = new System.Drawing.Size(189, 24);
+            this.PortComboBox.TabIndex = 22;
+            this.PortComboBox.Text = "Port Seçin";
+            this.PortComboBox.SelectedValueChanged += new System.EventHandler(this.PortComboBox_SelectedValueChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 317);
-            this.Controls.Add(this.label3);
+            this.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.ClientSize = new System.Drawing.Size(464, 366);
+            this.Controls.Add(this.PortComboBox);
             this.Controls.Add(this.baglantiStatus);
             this.Controls.Add(this.baglantiKesBtn);
             this.Controls.Add(this.baglanBtn);
@@ -287,7 +363,10 @@
             this.Controls.Add(this.HizlanBtn);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.DurdurBtn);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Pompa Uygulaması";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.panel1.ResumeLayout(false);
@@ -309,7 +388,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox HizTxt;
         private System.Windows.Forms.Button HizlanBtn;
-        private System.Windows.Forms.Label StepLbl;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button DurdurBtn;
@@ -318,11 +396,17 @@
         private System.Windows.Forms.TextBox ExtraStepIlaveTxt;
         private System.Windows.Forms.Label ExtraStepIlaveLbl;
         private System.Windows.Forms.CheckBox IlaveCheckBox;
-        private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.CheckBox TersYonCheck;
         private System.Windows.Forms.Button baglanBtn;
         private System.Windows.Forms.Button baglantiKesBtn;
         private System.Windows.Forms.Button baglantiStatus;
+        private System.Windows.Forms.ComboBox PortComboBox;
+        private System.Windows.Forms.Label IlaveAdetLbl;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button ProgramBtn;
+        private System.Windows.Forms.Button RunningBtn;
+        private System.Windows.Forms.Button PositionBtn;
     }
 }

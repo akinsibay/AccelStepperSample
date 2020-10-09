@@ -8,11 +8,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.IO.Ports;
 namespace AccelStepperSample
 {
     public partial class MainForm : Form
     {
+        string[] ports = SerialPort.GetPortNames();
+        string data;
+        string[] serialData;
+        int ilaveCount=0;
         public static double maxSpeed = 3500.0;
         public static string hiz, extraStepAna, extraStepIlave;
         public MainForm()
@@ -26,8 +30,10 @@ namespace AccelStepperSample
             ExtraStepIlaveTxt.Text = "0";
             ExtraStepIlaveLbl.Visible = false;
             ExtraStepIlaveTxt.Visible = false;
-            
-            arduinoConnect();
+            foreach (string port in ports)
+            {
+                PortComboBox.Items.Add(port);
+            }
         }
         
         private void HizlanBtn_Click(object sender, EventArgs e)
@@ -46,26 +52,24 @@ namespace AccelStepperSample
             }
             else
             {
-                MessageBox.Show("Port bağlantısı kapalı. Açıp tekrar deneyin.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Port bağlantısı kapalı. Açıp tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
        
         private void AnaProgramBaslat()
         {
             string command = TextHazirla("B", hiz, extraStepAna, extraStepIlave);
-            //MessageBox.Show(command);
             arduino.Write(command);
             Thread.Sleep(100);
-            StepLbl.Text = arduino.ReadLine();
             ExtraStepAnaTxt.Text = "0";
         }
+  
         private void IlaveProgramBaslat()
         {
+            IlaveAdetArttir();
             string command = TextHazirla("C", hiz, extraStepAna, extraStepIlave);
-            //MessageBox.Show(command);
             arduino.Write(command);
             Thread.Sleep(100);
-            StepLbl.Text = arduino.ReadLine();
             ExtraStepAnaTxt.Text = "0";
         }
 
@@ -75,10 +79,11 @@ namespace AccelStepperSample
             {
                 string command = TextHazirla("D", HizTxt.Text, ExtraStepAnaTxt.Text, ExtraStepIlaveTxt.Text);
                 arduino.Write(command);
+                IlaveAdetSifirla();
             }
             else
             {
-                MessageBox.Show("Port bağlantısı kapalı. Açıp tekrar deneyin.","", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Port bağlantısı kapalı. Açıp tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
         }
@@ -88,12 +93,53 @@ namespace AccelStepperSample
             return command + t1 + " " + t2 + " " + t3;
         }
 
-        private void timer_Tick(object sender, EventArgs e)
+        private void arduino_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            if (arduino.IsOpen)
+            data = arduino.ReadLine();
+            Invoke(new EventHandler(ShowData));
+        }
+        private void ShowData(object sender, EventArgs e)
+        {
+            try
             {
-                label3.Text = arduino.ReadExisting();
-            }      
+                serialData = data.Split(' ');
+                PositionBtn.Text = serialData[0];
+
+                if (serialData[1] == "1")
+                {
+                    RunningBtn.Text = "ÇALIŞIYOR";
+                    RunningBtn.BackColor = Color.LimeGreen;
+                }
+                else
+                {
+                    RunningBtn.Text = "DURUYOR";
+                    RunningBtn.BackColor = Color.DarkGray;
+                    IlaveAdetSifirla();
+                }
+
+                if (serialData[2] == "1" && serialData[3] == "0\r")
+                {
+                    ProgramBtn.Text = "ANA PROGRAM";
+                    ProgramBtn.BackColor = Color.Aqua;
+                    HizlanBtn.Enabled = true;
+                }
+                else if (serialData[2] == "0" && serialData[3] == "1\r")
+                {
+                    ProgramBtn.Text = "İLAVE PROGRAM";
+                    ProgramBtn.BackColor = Color.GreenYellow;
+                    HizlanBtn.Enabled = false;
+                }
+                else
+                {
+                    ProgramBtn.Text = "YOK";
+                    ProgramBtn.BackColor = Color.DarkGray;
+                }
+
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw;
+            }
         }
 
         private void IlaveCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -116,12 +162,12 @@ namespace AccelStepperSample
             {
                 if (System.Text.RegularExpressions.Regex.IsMatch(HizTxt.Text, "[^0-9]"))
                 {
-                    MessageBox.Show("Sadece tam sayı girilebilir.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Sadece tam sayı girilebilir.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     HizTxt.Text = HizTxt.Text.Remove(HizTxt.Text.Length - 1);
                 }
                 if (Convert.ToInt32(HizTxt.Text) > maxSpeed)
                 {
-                    MessageBox.Show("Hız en fazla " + maxSpeed + " olabilir.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Hız en fazla " + maxSpeed + " olabilir.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     HizTxt.Text = HizTxt.Text.Remove(HizTxt.Text.Length - 1);
                 }
             }
@@ -138,7 +184,7 @@ namespace AccelStepperSample
             {
                 if (System.Text.RegularExpressions.Regex.IsMatch(ExtraStepAnaTxt.Text, "[^0-9]"))
                 {
-                    MessageBox.Show("Sadece tam sayı girilebilir.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Sadece tam sayı girilebilir.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ExtraStepAnaTxt.Text = ExtraStepAnaTxt.Text.Remove(ExtraStepAnaTxt.Text.Length - 1);
                 }
                 if(ExtraStepAnaTxt.Text == "")
@@ -159,7 +205,7 @@ namespace AccelStepperSample
             {
                 if (System.Text.RegularExpressions.Regex.IsMatch(ExtraStepIlaveTxt.Text, "[^0-9]"))
                 {
-                    MessageBox.Show("Sadece tam sayı girilebilir.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Sadece tam sayı girilebilir.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ExtraStepIlaveTxt.Text = ExtraStepIlaveTxt.Text.Remove(ExtraStepIlaveTxt.Text.Length - 1);
                 }
                 if (ExtraStepIlaveTxt.Text == "")
@@ -198,7 +244,7 @@ namespace AccelStepperSample
             }
             else
             {
-                MessageBox.Show("Zaten bağlı.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Zaten bağlı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -210,8 +256,13 @@ namespace AccelStepperSample
             }
             else
             {
-                MessageBox.Show("Zaten bağlantı kapalı.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Zaten bağlantı kapalı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void PortComboBox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            arduino.PortName = PortComboBox.SelectedItem.ToString();
         }
 
         private void arduinoConnect()
@@ -225,11 +276,10 @@ namespace AccelStepperSample
             }
             catch (Exception)
             {
-                MessageBox.Show("COM bağlantısı kapalı. Lütfen tekrar deneyin.","", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-            
+                MessageBox.Show("COM bağlantısı kapalı. Lütfen tekrar deneyin.","Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }           
         }
+   
         private void arduinoDisconnect()
         {
             try
@@ -244,6 +294,18 @@ namespace AccelStepperSample
                 MessageBox.Show(e.Message);
             }
         }
+        
+        private void IlaveAdetArttir()
+        {
+            ilaveCount++;
+            IlaveAdetLbl.Text = ilaveCount.ToString();
+        }
+        private void IlaveAdetSifirla()
+        {
+            ilaveCount = 0;
+            IlaveAdetLbl.Text = ilaveCount.ToString();
+        }
+    
     }
 
 }
