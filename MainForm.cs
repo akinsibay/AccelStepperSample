@@ -133,6 +133,7 @@ namespace AccelStepperSample
                 {
                     ProgramBtn.Text = "YOK";
                     ProgramBtn.BackColor = Color.DarkGray;
+                    HizlanBtn.Enabled = true;
                 }
 
             }
@@ -300,6 +301,7 @@ namespace AccelStepperSample
             ilaveCount++;
             IlaveAdetLbl.Text = ilaveCount.ToString();
         }
+       
         private void IlaveAdetSifirla()
         {
             ilaveCount = 0;
